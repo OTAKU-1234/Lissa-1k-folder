@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lissa 1K Folder — Lissa Entreprise</title>
+
+    <meta
+        name="description"
+        content="Mete statuw devan tout Moun — Lissa 1K Folder"
+    >
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVIGATION ================= -->
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+            <span class="logo-mark">LE</span>
+
+            <span>
+                <strong>LISSA</strong>
+                <small>ENTREPRISE</small>
+            </span>
+        </a>
+
+        <nav>
+            <a href="#inscription">Enskri</a>
+            <a href="#membres">Moun ki deja</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+
+    </header>
+
+
+    <!-- ================= PAGE ================= -->
+
+    <main>
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="badge">
+                    LISSA 1K FOLDER
+                </div>
+
+                <h1>
+                    Mete statuw
+                    <span>devan tout Moun.</span>
+                </h1>
+
+                <p class="hero-text">
+                    Rejwenn kominote Lissa 1K Folder la.
+                    Enskri enfòmasyon ou epi fè non ou antre
+                    nan kominote a.
+                </p>
+
+                <div class="hero-stats">
+
+                    <div class="stat">
+                        <strong id="memberCount">0</strong>
+                        <span>Moun enskri</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>1K</strong>
+                        <span>Objectif</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARTE LISSA -->
+
+            <div class="hero-card">
+
+                <div class="card-top">
+                    <span>LE</span>
+                    <span>01K</span>
+                </div>
+
+                <div class="card-logo">
+                    LE
+                </div>
+
+                <div class="card-title">
+                    LISSA
+                </div>
+
+                <div class="card-subtitle">
+                    ENTREPRISE
+                </div>
+
+                <div class="card-bottom">
+                    <span>LISSA 1K FOLDER</span>
+                    <span>2026</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= INSCRIPTION ================= -->
+
+        <section id="inscription" class="section">
+
+            <div class="section-title">
+
+                <span class="eyebrow">
+                    INSCRIPTION
+                </span>
+
+                <h2>
+                    Rejwenn nou
+                </h2>
+
+                <p>
+                    Ranpli fòm lan pou voye demann ou.
+                </p>
+
+            </div>
+
+
+            <div class="form-card">
+
+                <form id="registrationForm">
+
+                    <!-- NOM -->
+
+                    <div class="field">
+
+                        <label for="name">
+                            Nom complet
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Exemple : Jean Baptiste"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PAYS -->
+
+                    <div class="field">
+
+                        <label for="country">
+                            Pays
+                        </label>
+
+                        <select id="country" name="country" required>
+
+                            <option value="HT">
+                                Haïti (+509)
+                            </option>
+
+                            <option value="DO">
+                                République dominicaine (+1)
+                            </option>
+
+                            <option value="US">
+                                États-Unis (+1)
+                            </option>
+
+                            <option value="CA">
+                                Canada (+1)
+                            </option>
+
+                            <option value="FR">
+                                France (+33)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TELEPHONE -->
+
+                    <div class="field">
+
+                        <label for="phone">
+                            Numéro WhatsApp
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="34567890"
+                            autocomplete="tel"
+                            required
+                        >
+
+                        <small>
+                            Exemple pour Haïti : 34567890
+                        </small>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="field">
+
+                        <label for="email">
+                            Email
+                            <span>(facultatif)</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="exemple@gmail.com"
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Envoyer ma demande
+                    </button>
+
+
+                    <p id="formMessage" class="form-message"></p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= LISTE ================= -->
+
+        <section id="membres" class="section members-section">
+
+            <div class="section-title">
+
+                <span class="eyebrow">
+                    KOMINOTE A
+                </span>
+
+                <h2>
+                    Moun ki deja enskri
+                </h2>
+
+                <p>
+                    Men non moun ki deja antre nan kominote a.
+                </p>
+
+            </div>
+
+
+            <div class="members-card">
+
+                <div id="membersList">
+
+                    <div class="empty-members">
+                        Aucun membre pour le moment.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= WHATSAPP ================= -->
+
+    <a
+        href="https://chat.whatsapp.com/DlNgdQAHcVw1m7NuTIxytI?s=cl&p=a&ilr=1"
+        class="whatsapp-button"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Rejoindre le groupe WhatsApp"
+    >
+
+        <span class="whatsapp-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path
+                    d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.5 0 .1 5.4.1 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6a12 12 0 0 0 5.9 1.5h.1c6.6 0 12-5.4 12-12 0-3.2-1.3-6.2-3.7-8.4Zm-8.4 18.3c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 0 1-1.5-5.2c0-5.4 4.4-9.8 9.8-9.8 2.6 0 5.1 1 6.9 2.9 1.9 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8Zm5.4-7.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-1.5-.7-2.5-1.3-3.5-3-.3-.5.3-.5.8-1.6.1-.2.1-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.9 5.2 2.2 1 2.2.7 2.6.7.4 0 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"
+                />
+            </svg>
+
+        </span>
+
+    </a>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>LISSA ENTREPRISE</strong>
+
+        <p>
+            Lissa 1K Folder — Mete statuw devan tout Moun.
+        </p>
+
+        <span>
+            © 2026 Lissa Entreprise
+        </span>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
