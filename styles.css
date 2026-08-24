@@ -1,0 +1,647 @@
+:root {
+    --green: #69e89a;
+    --green-dark: #20b967;
+    --green-light: #eafff1;
+
+    --bg: #07120d;
+    --bg-card: #0d1c14;
+    --bg-card-2: #11251a;
+
+    --text: #ffffff;
+    --muted: #9aaea2;
+
+    --border: rgba(105, 232, 154, 0.18);
+
+    --radius: 20px;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(
+            circle at 20% 10%,
+            rgba(105, 232, 154, 0.10),
+            transparent 35%
+        ),
+        var(--bg);
+
+    color: var(--text);
+    min-height: 100vh;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+
+    padding: 20px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+    text-decoration: none;
+}
+
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--green);
+    color: #06140c;
+
+    font-weight: 900;
+}
+
+
+.logo strong {
+    display: block;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+
+.logo small {
+    display: block;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+
+nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+nav a:hover {
+    color: var(--green);
+}
+
+
+/* ================= HERO ================= */
+
+main {
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+.hero {
+    min-height: 650px;
+
+    padding: 90px 24px;
+
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    align-items: center;
+    gap: 70px;
+}
+
+
+.badge,
+.eyebrow {
+    display: inline-block;
+
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.hero h1 {
+    margin-top: 20px;
+
+    font-size: clamp(48px, 7vw, 82px);
+    line-height: 0.98;
+
+    letter-spacing: -4px;
+}
+
+
+.hero h1 span {
+    color: var(--green);
+}
+
+
+.hero-text {
+    max-width: 620px;
+
+    margin-top: 28px;
+
+    color: var(--muted);
+
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+
+.hero-stats {
+    display: flex;
+    gap: 14px;
+
+    margin-top: 35px;
+}
+
+
+.stat {
+    padding: 16px 22px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+}
+
+
+.stat strong {
+    display: block;
+
+    color: var(--green);
+
+    font-size: 24px;
+}
+
+
+.stat span {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* ================= CARD ================= */
+
+.hero-card {
+    min-height: 480px;
+
+    padding: 30px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #173e28,
+            #09150e
+        );
+
+    border: 1px solid rgba(105, 232, 154, 0.25);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45);
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.card-top,
+.card-bottom {
+    display: flex;
+    justify-content: space-between;
+
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+
+.card-logo {
+    width: 150px;
+    height: 150px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    border: 2px solid var(--green);
+
+    color: var(--green);
+
+    font-size: 42px;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 50px rgba(105, 232, 154, 0.12);
+}
+
+
+.card-title {
+    text-align: center;
+
+    font-size: 34px;
+    font-weight: 900;
+
+    letter-spacing: 7px;
+}
+
+
+.card-subtitle {
+    text-align: center;
+
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+
+/* ================= SECTIONS ================= */
+
+.section {
+    padding: 80px 24px;
+}
+
+
+.section-title {
+    max-width: 700px;
+    margin: 0 auto 35px;
+
+    text-align: center;
+}
+
+
+.section-title h2 {
+    margin-top: 10px;
+
+    font-size: 42px;
+    letter-spacing: -1px;
+}
+
+
+.section-title p {
+    margin-top: 12px;
+
+    color: var(--muted);
+}
+
+
+/* ================= FORM ================= */
+
+.form-card,
+.members-card {
+    max-width: 620px;
+
+    margin: auto;
+
+    padding: 30px;
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+.field {
+    margin-bottom: 20px;
+}
+
+
+.field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.field label span {
+    color: var(--muted);
+    font-weight: normal;
+}
+
+
+input,
+select {
+    width: 100%;
+
+    padding: 15px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    background: var(--bg-card-2);
+
+    color: white;
+
+    outline: none;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+input:focus,
+select:focus {
+    border-color: var(--green);
+
+    box-shadow:
+        0 0 0 3px rgba(105, 232, 154, 0.08);
+}
+
+
+.field small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+.primary-button {
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: var(--green);
+
+    color: #06140c;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.primary-button:hover {
+    background: #8af2b0;
+
+    transform: translateY(-2px);
+}
+
+
+.form-message {
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* ================= MEMBERS ================= */
+
+.members-section {
+    padding-bottom: 120px;
+}
+
+
+.member {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.member:last-child {
+    border-bottom: none;
+}
+
+
+.member-name {
+    font-weight: 700;
+}
+
+
+.member-date {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+.empty-members {
+    padding: 35px 10px;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+
+/* ================= WHATSAPP ================= */
+
+.whatsapp-button {
+    position: fixed;
+
+    right: 22px;
+    bottom: 22px;
+
+    width: 62px;
+    height: 62px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    background: #25D366;
+
+    box-shadow:
+        0 12px 35px rgba(37, 211, 102, 0.35);
+
+    z-index: 1000;
+
+    transition: 0.25s;
+}
+
+
+.whatsapp-button:hover {
+    transform: scale(1.08);
+}
+
+
+.whatsapp-icon svg {
+    width: 31px;
+    height: 31px;
+
+    fill: white;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+footer strong {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: white;
+
+    letter-spacing: 2px;
+}
+
+
+footer p {
+    margin-bottom: 8px;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+    .navbar {
+        padding: 16px;
+    }
+
+
+    nav {
+        gap: 12px;
+    }
+
+
+    nav a {
+        font-size: 12px;
+    }
+
+
+    .hero {
+        grid-template-columns: 1fr;
+
+        padding-top: 60px;
+
+        gap: 45px;
+    }
+
+
+    .hero h1 {
+        font-size: 52px;
+    }
+
+
+    .hero-card {
+        min-height: 400px;
+    }
+
+
+    .section-title h2 {
+        font-size: 34px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    nav a:nth-child(2) {
+        display: none;
+    }
+
+
+    .hero {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+
+    .section {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+
+    .form-card,
+    .members-card {
+        padding: 22px;
+    }
+
+
+    .hero h1 {
+        font-size: 44px;
+    }
+
+
+    .hero-card {
+        min-height: 360px;
+    }
+
+  }
