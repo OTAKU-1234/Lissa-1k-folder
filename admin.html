@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lissa Admin</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="admin-body">
+
+<div class="admin-shell">
+
+    <header class="admin-topbar">
+
+        <div class="admin-brand">
+            <div class="admin-logo">LE</div>
+            <div>
+                LISSA
+                <small style="display:block;color:#769587;font-size:10px;">
+                    ADMIN PANEL
+                </small>
+            </div>
+        </div>
+
+        <div class="admin-status">
+            <span class="admin-status-dot"></span>
+            Système sécurisé
+        </div>
+
+    </header>
+
+
+    <!-- LOGIN -->
+
+    <div id="loginPanel" class="login-wrapper">
+
+        <div class="login-card">
+
+            <div class="login-icon">⌁</div>
+
+            <h1>Espace Admin</h1>
+
+            <p>
+                Connecte-toi pour gérer les inscriptions
+                de Lissa 1K Folder.
+            </p>
+
+            <div id="loginMessage" class="admin-alert"></div>
+
+            <form id="loginForm">
+
+                <div class="admin-field">
+
+                    <label>Email administrateur</label>
+
+                    <input
+                        type="email"
+                        id="adminEmail"
+                        placeholder="admin@email.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label>Mot de passe</label>
+
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        placeholder="••••••••"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    class="admin-btn admin-btn-primary"
+                    style="width:100%;padding:15px;"
+                    id="loginButton"
+                >
+                    Se connecter
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <main id="adminDashboard" style="display:none;">
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>Tableau de bord</h1>
+
+                <p>
+                    Gestion des membres de Lissa 1K Folder.
+                </p>
+
+            </div>
+
+            <div class="dashboard-actions">
+
+                <button
+                    class="admin-btn admin-btn-ghost"
+                    onclick="loadDashboard()"
+                >
+                    Actualiser
+                </button>
+
+                <button
+                    class="admin-btn admin-btn-danger"
+                    id="logoutButton"
+                >
+                    Déconnexion
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    En attente
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="pendingCount"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Approuvés
+                </div>
+
+                <div
+                    class="stat-number stat-green"
+                    id="approvedCount"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    Total
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalCount"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="adminMessage"
+            class="admin-alert"
+        ></div>
+
+
+        <!-- DEMANDES -->
+
+        <section class="admin-section">
+
+            <div class="section-title">
+
+                <h2>Demandes en attente</h2>
+
+                <span>
+                    Validation manuelle
+                </span>
+
+            </div>
+
+
+            <div id="pendingList">
+
+                <div class="admin-empty">
+                    Chargement des demandes...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VCF -->
+
+        <section class="admin-section">
+
+            <div class="vcf-box">
+
+                <div class="vcf-info">
+
+                    <strong>
+                        Carnet de contacts
+                    </strong>
+
+                    <span>
+                        Génère le fichier unique
+                        <strong>Lissa.vcf</strong>
+                        avec tous les contacts approuvés.
+                    </span>
+
+                </div>
+
+
+                <button
+                    class="admin-btn admin-btn-primary"
+                    id="downloadVcf"
+                >
+                    Télécharger Lissa.vcf
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="admin-footer">
+
+        LISSA ENTREPRISE
+
+        <br>
+
+        Lissa 1K Folder · Mete statuw devan tout Moun
+
+    </footer>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+
+<script>
+
+const loginPanel =
+    document.getElementById("loginPanel");
+
+const adminDashboard =
+    document.getElementById("adminDashboard");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const adminMessage =
+    document.getElementById("adminMessage");
+
+const pendingList =
+    document.getElementById("pendingList");
+
+
+function showAlert(element, text, type = "error") {
+
+    element.className =
+        `admin-alert admin-alert-${type} show`;
+
+    element.textContent = text;
+
+}
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* LOGIN */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("adminEmail")
+            .value.trim();
+
+        const password =
+            document.getElementById("adminPassword")
+            .value;
+
+        const button =
+            document.getElementById("loginButton");
+
+        button.disabled = true;
+        button.textContent = "Connexion...";
+
+
+        const { error } =
+            await supabaseClient.auth
+            .signInWithPassword({
+                email,
+                password
+            });
+
+
+        button.disabled = false;
+        button.textContent = "Se connecter";
+
+
+        if (error) {
+
+            console.error(error);
+
+            showAlert(
+                loginMessage,
+                "Email ou mot de passe incorrect."
+            );
+
+            return;
+        }
+
+
+        loginPanel.style.display = "none";
+
+        adminDashboard.style.display = "block";
+
+        loadDashboard();
+
+    }
+);
+
+
+/* DASHBOARD */
+
+async function loadDashboard() {
+
+    await loadStats();
+
+    await loadPendingRequests();
+
+}
+
+
+/* STATS */
+
+async function loadStats() {
+
+    const { data, error } =
+        await supabaseClient
+        .from("registrations")
+        .select("status");
+
+
+    if (error) {
+
+        console.error(error);
+
+        return;
+    }
+
+
+    const pending =
+        data.filter(x => x.status === "pending").length;
+
+    const approved =
+        data.filter(x => x.status === "approved").length;
+
+
+    document.getElementById("pendingCount")
+        .textContent = pending;
+
+    document.getElementById("approvedCount")
+        .textContent = approved;
+
+    document.getElementById("totalCount")
+        .textContent = data.length;
+
+}
+
+
+/* PENDING */
+
+async function loadPendingRequests() {
+
+    pendingList.innerHTML = `
+        <div class="admin-empty">
+            Chargement...
+        </div>
+    `;
+
+
+    const { data, error } =
+        await supabaseClient
+        .from("registrations")
+        .select("*")
+        .eq("status", "pending")
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        pendingList.innerHTML = `
+            <div class="admin-empty">
+                Impossible de charger les demandes.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data.length) {
+
+        pendingList.innerHTML = `
+            <div class="admin-empty">
+                Aucune demande en attente.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    pendingList.innerHTML = "";
+
+
+    data.forEach(user => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "request-card";
+
+
+        const date =
+            new Date(user.created_at)
+            .toLocaleString("fr-FR");
+
+
+        card.innerHTML = `
+
+            <div>
+
+                <div class="request-name">
+                    ${escapeHTML(user.name)}
+                </div>
+
+                <div class="request-info">
+
+                    <span class="info-chip">
+                        WhatsApp :
+                        ${escapeHTML(user.phone)}
+                    </span>
+
+                    <span class="info-chip">
+                        ${escapeHTML(user.country)}
+                    </span>
+
+                    <span class="info-chip">
+                        ${escapeHTML(
+                            user.email || "Pas d'email"
+                        )}
+                    </span>
+
+                </div>
+
+                <div class="request-date">
+                    Inscrit le ${date}
+                </div>
+
+            </div>
+
+
+            <div class="request-actions">
+
+                <button
+                    class="admin-btn admin-btn-danger"
+                    onclick="rejectUser(${user.id})"
+                >
+                    Refuser
+                </button>
+
+                <button
+                    class="admin-btn admin-btn-primary"
+                    onclick="approveUser(${user.id})"
+                >
+                    Approuver
+                </button>
+
+            </div>
+        `;
+
+
+        pendingList.appendChild(card);
+
+    });
+
+}
+
+
+/* APPROVE */
+
+async function approveUser(id) {
+
+    const { error } =
+        await supabaseClient
+        .from("registrations")
+        .update({
+            status: "approved"
+        })
+        .eq("id", id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        showAlert(
+            adminMessage,
+            "Impossible d'approuver cette demande."
+        );
+
+        return;
+    }
+
+
+    showAlert(
+        adminMessage,
+        "Demande approuvée.",
+        "success"
+    );
+
+
+    loadDashboard();
+
+}
+
+
+/* REJECT */
+
+async function rejectUser(id) {
+
+    const { error } =
+        await supabaseClient
+        .from("registrations")
+        .update({
+            status: "rejected"
+        })
+        .eq("id", id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        showAlert(
+            adminMessage,
+            "Impossible de refuser cette demande."
+        );
+
+        return;
+    }
+
+
+    showAlert(
+        adminMessage,
+        "Demande refusée.",
+        "success"
+    );
+
+
+    loadDashboard();
+
+}
+
+
+/* VCF */
+
+document
+.getElementById("downloadVcf")
+.addEventListener(
+    "click",
+    downloadVCF
+);
+
+
+async function downloadVCF() {
+
+    const { data, error } =
+        await supabaseClient
+        .from("registrations")
+        .select("name, phone")
+        .eq("status", "approved")
+        .order("created_at", {
+            ascending: true
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        showAlert(
+            adminMessage,
+            "Impossible de récupérer les contacts."
+        );
+
+        return;
+    }
+
+
+    let vcf = "";
+
+
+    data.forEach(contact => {
+
+        const name =
+            `LE ${contact.name}`;
+
+
+        vcf +=
+`BEGIN:VCARD
+VERSION:3.0
+FN:${escapeVCF(name)}
+TEL;TYPE=CELL:${escapeVCF(contact.phone)}
+END:VCARD
+`;
+
+    });
+
+
+    const blob =
+        new Blob(
+            [vcf],
+            {
+                type: "text/vcard;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "Lissa.vcf";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+function escapeVCF(text) {
+
+    return String(text ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/\n/g, "\\n")
+        .replace(/;/g, "\\;")
+        .replace(/,/g, "\\,");
+}
+
+
+/* LOGOUT */
+
+document
+.getElementById("logoutButton")
+.addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient.auth.signOut();
+
+        adminDashboard.style.display = "none";
+
+        loginPanel.style.display = "grid";
+
+        loginForm.reset();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
