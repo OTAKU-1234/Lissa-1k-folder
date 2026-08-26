@@ -1,177 +1,205 @@
-const form = document.getElementById("regForm");
-const alertBox = document.getElementById("alertBox");
-const submitBtn = document.getElementById("submitBtn");
+// =====================================================
+// LISSA 1K FOLDER
+// Script inscription + membres
+// =====================================================
 
-const countrySelect = document.getElementById("countryCode");
-const phoneHint = document.getElementById("phoneHint");
-const dialPrefix = document.getElementById("dialPrefix");
+const form = document.getElementById("registrationForm");
+const message = document.getElementById("formMessage");
+const membersList = document.getElementById("membersList");
+const memberCount = document.getElementById("memberCount");
 
 
 // =====================================================
-// ICÔNES
+// INSCRIPTION
 // =====================================================
 
-if (typeof ICONS !== "undefined") {
+if (form) {
 
-    const brandMark = document.getElementById("brandMark");
-    const cardIcon = document.getElementById("cardIcon");
-    const chevronIcon = document.getElementById("chevronIcon");
-    const chatIcon1 = document.getElementById("chatIcon1");
-    const chatIcon2 = document.getElementById("chatIcon2");
-    const lockIcon = document.getElementById("lockIcon");
-    const eyebrowTag = document.getElementById("eyebrowTag");
+    form.addEventListener("submit", async function (e) {
 
-    if (brandMark) brandMark.innerHTML = ICONS.joker;
-    if (cardIcon) cardIcon.innerHTML = ICONS.joker;
-    if (chevronIcon) chevronIcon.innerHTML = ICONS.chevron;
-    if (chatIcon1) chatIcon1.innerHTML = ICONS.chat;
-    if (chatIcon2) chatIcon2.innerHTML = ICONS.chat;
-    if (lockIcon) lockIcon.innerHTML = ICONS.lock;
+        e.preventDefault();
 
-    if (eyebrowTag) {
-        eyebrowTag.innerHTML =
-            `<span class="icon-inline">${ICONS.flame}</span> 500,000 VIEWS AP TANN OU`;
-    }
-}
+        const name =
+            document.getElementById("name").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const country =
+            document.getElementById("country").value;
+
+        const email =
+            document.getElementById("email").value.trim();
 
 
-// =====================================================
-// PAYS
-// =====================================================
+        // ================= VALIDATION =================
 
-if (countrySelect && typeof COUNTRIES !== "undefined") {
+        if (name.length < 2) {
 
-    COUNTRIES.forEach((c) => {
+            showMessage(
+                "Tanpri antre non ou.",
+                "#ff6b6b"
+            );
 
-        const option = document.createElement("option");
+            return;
+        }
 
-        option.value = c.code;
 
-        option.textContent =
-            `${c.iso} +${c.code} · ${c.name}`;
+        if (phone.length < 6) {
 
-        countrySelect.appendChild(option);
+            showMessage(
+                "Tanpri antre yon nimewo WhatsApp valab.",
+                "#ff6b6b"
+            );
+
+            return;
+        }
+
+
+        if (!country) {
+
+            showMessage(
+                "Tanpri chwazi peyi ou.",
+                "#ff6b6b"
+            );
+
+            return;
+        }
+
+
+        // ================= ENVOI =================
+
+        showMessage(
+            "Ap voye demann ou...",
+            "#69e89a"
+        );
+
+
+        const button =
+            form.querySelector("button[type='submit']");
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.textContent =
+                "Ap voye...";
+
+        }
+
+
+        // ================= SUPABASE =================
+
+        const { error } =
+            await supabaseClient
+            .from("registrations")
+            .insert({
+
+                name: name,
+
+                phone: phone,
+
+                country: country,
+
+                email: email || null,
+
+                status: "pending"
+
+            });
+
+
+        // ================= RÉACTIVER =================
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Envoyer ma demande";
+
+        }
+
+
+        // ================= ERREUR =================
+
+        if (error) {
+
+            console.error(
+                "Erreur Supabase :",
+                error
+            );
+
+            showMessage(
+                "Yon pwoblèm rive. Tanpri eseye ankò.",
+                "#ff6b6b"
+            );
+
+            return;
+        }
+
+
+        // ================= SUCCÈS =================
+
+        showMessage(
+            "Demann ou voye avèk siksè. Tann apwobasyon admin lan.",
+            "#69e89a"
+        );
+
+
+        form.reset();
+
+
+        // Actualiser la liste
+        loadMembers();
 
     });
 
-    countrySelect.value = "509";
-}
-
-
-function updateHint() {
-
-    if (!countrySelect) return;
-
-    const country =
-        findCountryByCode(countrySelect.value);
-
-    if (!country) return;
-
-    const min = country.len[0];
-    const max = country.len[1];
-
-    const lenTxt =
-        min === max
-            ? `${min} chif`
-            : `ant ${min} ak ${max} chif`;
-
-    if (phoneHint) {
-        phoneHint.textContent =
-            `${country.name}: nimewo a dwe gen ${lenTxt}, san kod peyi a.`;
-    }
-
-    if (dialPrefix) {
-        dialPrefix.textContent =
-            `+${country.code}`;
-    }
-}
-
-
-if (countrySelect) {
-    countrySelect.addEventListener(
-        "change",
-        updateHint
-    );
-}
-
-updateHint();
-
-
-// =====================================================
-// ALERT
-// =====================================================
-
-function showAlert(type, msg, icon) {
-
-    if (!alertBox) return;
-
-    alertBox.className =
-        `alert alert-${type} show`;
-
-    if (
-        icon &&
-        typeof ICONS !== "undefined" &&
-        ICONS[icon]
-    ) {
-
-        alertBox.innerHTML =
-            `<span class="icon-inline">${ICONS[icon]}</span> ${msg}`;
-
-    } else {
-
-        alertBox.textContent = msg;
-
-    }
 }
 
 
 // =====================================================
-// ERREUR CHAMPS
+// MESSAGE
 // =====================================================
 
-function setFieldError(id, hasError) {
+function showMessage(text, color) {
 
-    const field =
-        document.getElementById(id);
+    if (!message) {
 
-    if (field) {
+        console.log(text);
 
-        field.classList.toggle(
-            "has-error",
-            hasError
-        );
-
-    }
-}
-
-
-// =====================================================
-// STATISTIQUES
-// =====================================================
-
-async function loadHomeStats() {
-
-    const totalElement =
-        document.getElementById("homeTotalCount");
-
-    const todayElement =
-        document.getElementById("homeTodayCount");
-
-    if (!totalElement || !todayElement) {
         return;
     }
+
+    message.textContent = text;
+
+    message.style.color = color;
+
+}
+
+
+// =====================================================
+// CHARGER LES MEMBRES
+// =====================================================
+
+async function loadMembers() {
+
+    if (!membersList) return;
 
 
     const { data, error } =
         await supabaseClient
         .from("registrations")
-        .select("created_at");
+        .select("name")
+        .eq("status", "approved")
+        .order("created_at", {
+            ascending: false
+        });
 
 
     if (error) {
 
         console.error(
-            "Erreur statistiques :",
+            "Erreur chargement membres :",
             error
         );
 
@@ -179,368 +207,63 @@ async function loadHomeStats() {
     }
 
 
-    totalElement.textContent =
-        data.length.toLocaleString("fr-FR");
+    // Nombre de membres
+    if (memberCount) {
 
+        memberCount.textContent =
+            data.length;
 
-    const today =
-        new Date().toDateString();
+    }
 
 
-    const todayCount =
-        data.filter((item) => {
+    // Aucun membre
+    if (!data || data.length === 0) {
 
-            return new Date(
-                item.created_at
-            ).toDateString() === today;
+        membersList.innerHTML = `
+            <div class="empty-members">
+                Aucun membre pour le moment.
+            </div>
+        `;
 
-        }).length;
+        return;
+    }
 
 
-    todayElement.textContent =
-        todayCount.toLocaleString("fr-FR");
-}
+    // Affichage uniquement des noms
+    membersList.innerHTML =
+        data.map(member => {
 
+            return `
+                <div class="member-item">
+                    <span class="member-name">
+                        ${escapeHTML(member.name)}
+                    </span>
+                </div>
+            `;
 
-loadHomeStats();
-
-
-// =====================================================
-// FORMULAIRE
-// =====================================================
-
-if (!form) {
-
-    console.error(
-        "ERREUR : le formulaire #regForm est introuvable."
-    );
-
-} else {
-
-    form.addEventListener(
-        "submit",
-        async function (e) {
-
-            e.preventDefault();
-
-
-            // ==============================
-            // RÉCUPÉRER LES INFORMATIONS
-            // ==============================
-
-            const name =
-                document
-                .getElementById("name")
-                .value
-                .trim();
-
-
-            const phoneRaw =
-                document
-                .getElementById("phone")
-                .value
-                .trim()
-                .replace(/\D/g, "");
-
-
-            const email =
-                document
-                .getElementById("email")
-                .value
-                .trim();
-
-
-            const country =
-                findCountryByCode(
-                    countrySelect.value
-                );
-
-
-            // ==============================
-            // VALIDATION NOM
-            // ==============================
-
-            const nameOK =
-                name.length >= 2;
-
-            setFieldError(
-                "nameField",
-                !nameOK
-            );
-
-
-            // ==============================
-            // VALIDATION TÉLÉPHONE
-            // ==============================
-
-            const phoneOK =
-                country &&
-                isValidLocalNumber(
-                    country,
-                    phoneRaw
-                );
-
-            setFieldError(
-                "phoneField",
-                !phoneOK
-            );
-
-
-            // ==============================
-            // VALIDATION EMAIL
-            // ==============================
-
-            const emailOK =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                .test(email);
-
-            setFieldError(
-                "emailField",
-                !emailOK
-            );
-
-
-            if (!nameOK || !phoneOK || !emailOK) {
-
-                showAlert(
-                    "error",
-                    "Tanpri korije chan ki make an wouj yo.",
-                    "warning"
-                );
-
-                return;
-            }
-
-
-            // ==============================
-            // NUMÉRO COMPLET
-            // ==============================
-
-            const fullPhone =
-                `+${country.code}${phoneRaw}`;
-
-
-            // ==============================
-            // BOUTON
-            // ==============================
-
-            submitBtn.disabled = true;
-
-            submitBtn.innerHTML =
-                '<span class="spinner"></span> Ap voye...';
-
-
-            showAlert(
-                "success",
-                "Ap voye demann ou...",
-                null
-            );
-
-
-            // =================================================
-            // SUPABASE
-            // =================================================
-
-            const { error } =
-                await supabaseClient
-                .from("registrations")
-                .insert({
-
-                    name: name,
-
-                    phone: fullPhone,
-
-                    country: country.name,
-
-                    email: email || null,
-
-                    status: "pending"
-
-                });
-
-
-            // ==============================
-            // RÉACTIVER BOUTON
-            // ==============================
-
-            submitBtn.disabled = false;
-
-            submitBtn.textContent =
-                "Enskri m kounye a";
-
-
-            // ==============================
-            // ERREUR
-            // ==============================
-
-            if (error) {
-
-                console.error(
-                    "ERREUR SUPABASE :",
-                    error
-                );
-
-
-                if (error.code === "23505") {
-
-                    showAlert(
-                        "error",
-                        "Nimewo sa a deja enskri.",
-                        "warning"
-                    );
-
-                } else {
-
-                    showAlert(
-                        "error",
-                        "Yon pwoblèm rive. Tanpri eseye ankò.",
-                        "warning"
-                    );
-
-                }
-
-                return;
-            }
-
-
-            // =================================================
-            // SUCCÈS
-            // =================================================
-
-            showAlert(
-                "success",
-                "Demann ou voye avèk siksè. Tann apwobasyon admin lan.",
-                "check"
-            );
-
-
-            // ==============================
-            // CARTE BIENVENUE
-            // ==============================
-
-            const welcomeCard =
-                document.getElementById(
-                    "welcomeCard"
-                );
-
-            const welcomeTitle =
-                document.getElementById(
-                    "welcomeTitle"
-                );
-
-            const welcomeIcon =
-                document.getElementById(
-                    "welcomeIcon"
-                );
-
-
-            if (welcomeTitle) {
-
-                welcomeTitle.textContent =
-                    `Byenveni, ${name.split(" ")[0]}!`;
-
-            }
-
-
-            if (
-                welcomeIcon &&
-                typeof ICONS !== "undefined"
-            ) {
-
-                welcomeIcon.innerHTML =
-                    ICONS.check;
-
-            }
-
-
-            if (welcomeCard) {
-
-                welcomeCard.style.display =
-                    "block";
-
-                welcomeCard.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-            }
-
-
-            // =================================================
-            // PARTAGE WHATSAPP
-            // =================================================
-
-            const whatsappShare =
-                document.getElementById(
-                    "whatsappShareBtn"
-                );
-
-
-            if (whatsappShare) {
-
-                const siteURL =
-                    window.location.origin +
-                    window.location.pathname
-                        .replace("index.html", "");
-
-
-                const shareMessage =
-                    `Mwen fèk enskri sou Lissa 1K Folder pou mete Statut WhatsApp mwen devan tout moun! Vin enskri ou tou, se gratis: ${siteURL}`;
-
-
-                whatsappShare.href =
-                    `https://wa.me/?text=${
-                        encodeURIComponent(
-                            shareMessage
-                        )
-                    }`;
-
-            }
-
-
-            // ==============================
-            // RESET
-            // ==============================
-
-            form.reset();
-
-            countrySelect.value = "509";
-
-            updateHint();
-
-
-            // ==============================
-            // STATS
-            // ==============================
-
-            loadHomeStats();
-
-        }
-    );
+        }).join("");
 
 }
 
 
 // =====================================================
-// BOUTON LISTE
+// PROTECTION AFFICHAGE NOM
 // =====================================================
 
-const viewListBtn =
-    document.getElementById(
-        "viewListBtn"
-    );
+function escapeHTML(text) {
 
+    const div =
+        document.createElement("div");
 
-if (viewListBtn) {
+    div.textContent = text;
 
-    viewListBtn.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "list.html";
-
-        }
-    );
+    return div.innerHTML;
 
 }
+
+
+// =====================================================
+// INITIALISATION
+// =====================================================
+
+loadMembers();
